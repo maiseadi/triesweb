@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tries - index </title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #1a1a1a;
+      color: #ccc;
+    } 
+
+    .sidebar {
+      width: 80px;
+      background-color: #1e1e1e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .app-name {
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      font-size: 24px;
+      margin-bottom: 60px;
+      color: #ccc;
+      letter-spacing: 3px;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 14px;
+      margin: 15px 0;
+      cursor: pointer;
+    }
+
+    .nav-btn:hover {
+      color: #fff;
+    }
+
+    .search-icon {
+      margin-top: auto;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .index-box {
+      background-color: #2a2a2a;
+      padding: 40px;
+      border-radius: 8px;
+      width: 320px;
+      text-align: center;
+    }
+
+    .index-box h2 {
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
+
+    .index-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 4px;
+      background-color: #444;
+      color: #eee;
+    }
+
+    .index-box button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #555;
+      border: none;
+      color: #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .signup-link {
+      margin-top: 20px;
+      display: block;
+      color: #888;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .signup-link:hover {
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="app-name">Tries</div>
+    <div class="search-icon" onclick="alert('Search coming soon!')">🔍</div>
+  </div>
+
+  <div class="main-content">
+    <div class="index-box">
+      <h2 id="form-title">Login</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="handleAuth()">Login</button>
+      <span class="signup-link" onclick="toggleMode()">Don't have an account? Sign up</span>
+    </div>
+  </div>
+
+  <script>
+    let isLogin = true;
+
+    function toggleMode() {
+      isLogin = !isLogin;
+      document.getElementById('form-title').innerText = isLogin ? 'Login' : 'Sign Up';
+      document.querySelector('.login-box button').innerText = isLogin ? 'Login' : 'Sign Up';
+      document.querySelector('.signup-link').innerText = isLogin 
+        ? "Don't have an account? Sign up" 
+        : "Already have an account? Login";
+    }
+
+    function handleAuth() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      if (!username || !password) {
+        alert('Please fill in both fields.');
+        return;
+      }
+
+      if (isLogin) {
+        const stored = JSON.parse(localStorage.getItem(username));
+        if (stored && stored.password === password) {
+          alert('Login successful!');
+          // Save logged in user for session tracking:
+          localStorage.setItem('loggedInUser', username);
+          // Redirect to profile page
+          window.location.href = "profile.html";
+        } else {
+          alert('Invalid username or password.');
+        }
+      } else {
+        if (localStorage.getItem(username)) {
+          alert('Username already exists.');
+          return;
+        }
+        localStorage.setItem(username, JSON.stringify({ username, password }));
+        alert('Account created! You can now log in.');
+        toggleMode();
+      }
+    }
+  </script>
+</body>
+</html>
